@@ -1,17 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, Input } from "@material-tailwind/react";
+import IdleTimer from "react-idle-timer";
 
 function App() {
+  const idleTimerRef = useRef(null);
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("name"));
   const [isLost, setIsLost] = useState(false);
+  const onIdle = () => {
+    setIsLost(true);
+  };
+
+  useEffect(() => {
+    console.log("user is active");
+  }, [isLoggedIn]);
+
   return (
     <div className="App">
-      {
-        //if no name in local storage then show SignInForm
-        //if name exists show hi {name} with a logout button
-        //implement dwell time function that renders new component after 5 seconds
-        //new component shows are you lost? with redirect links
-      }
       {isLoggedIn ? (
         <Greeting
           name={localStorage.getItem("name")}
@@ -20,10 +24,13 @@ function App() {
       ) : (
         <SignInForm setIsLoggedIn={setIsLoggedIn} />
       )}
-      {
-        //wait 5 seconds then setIsLost to true
-      }
-      {isLost && (
+      <IdleTimer
+        //@ts-ignore
+        ref={idleTimerRef}
+        timeout={5 * 1000}
+        onIdle={onIdle}
+      ></IdleTimer>
+      {isLost && isLoggedIn && (
         <AreYouLost name={localStorage.getItem("name")} setIsLost={setIsLost} />
       )}
     </div>
@@ -43,7 +50,7 @@ function SignInForm(props: any) {
 
   return (
     <>
-      <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col">
+      <div className=" bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col">
         <div className="mb-4">
           <label
             className="block text-grey-darker text-sm font-bold mb-2"
@@ -75,8 +82,9 @@ function SignInForm(props: any) {
           />
           <p className="text-red text-xs italic">Please choose a password.</p>
         </div>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col space-y-4 items-center justify-between">
           <Button onClick={() => handleInputSubmit()}>Sign In</Button>
+          <Button>filled</Button>
         </div>
       </div>
     </>
@@ -108,7 +116,9 @@ function AreYouLost(props: any) {
       <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col">
         <h1>Are you lost {name}</h1>
         <Button
-          onClick={() => (window.location.href = "https://help.nickelled.com")}
+          onClick={() =>
+            chrome.tabs.update({ url: "https://help.nickelled.com" })
+          }
         >
           Yes
         </Button>
