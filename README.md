@@ -9,11 +9,11 @@
 
 Tech Test Brief:
 
--Login form with social login buttons
--Only login form with name and password "password" should be implemented (any other login password will not work & social logins are inactive)
--Greeting and Log out button appears after a successful login
--After an idle time of 5 seconds a message saying "Are you lost?" will appear with a yes or no option
--yes redirects to https://help.nickelled.com/en/
+*Login form with social login buttons
+*Only login form with name and password "password" should be implemented (any other login password will not work & social logins are inactive)
+*Greeting and Log out button appears after a successful login
+*After an idle time of 5 seconds a message saying "Are you lost?" will appear with a yes or no option
+*yes redirects to https://help.nickelled.com/en/
 
 
 
